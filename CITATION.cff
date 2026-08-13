@@ -1,0 +1,53 @@
+cff-version: 1.2.0
+title: >-
+  Analysis code for "Global exposure of ocean-going ships to marine climate
+  extremes in a warming world"
+message: If you use this software, please cite both the software and the paper.
+type: software
+authors:
+  - given-names: Ruihan
+    family-names: Wang
+    affiliation: >-
+      School of Civil and Environmental Engineering, Nanyang Technological
+      University, Singapore
+  - given-names: Chenyu
+    family-names: Dong
+    affiliation: >-
+      Department of Mechanical Engineering, National University of Singapore,
+      Singapore
+  - given-names: Jasper
+    family-names: Verschuur
+    affiliation: >-
+      Faculty of Technology, Policy and Management, Delft University of
+      Technology, Delft, The Netherlands
+  - given-names: Gianmarco
+    family-names: Mengaldo
+    affiliation: >-
+      Department of Mechanical Engineering, National University of Singapore,
+      Singapore
+  - given-names: Xiuju
+    family-names: Fu
+    affiliation: >-
+      Department of Systems Science, Institute of High Performance Computing,
+      Agency for Science, Technology and Research (A*STAR), Singapore
+  - given-names: Tangwei
+    family-names: Mi
+    affiliation: >-
+      Institute of Structural Engineering, Zhejiang University, Hangzhou, China
+  - given-names: Xunchang
+    family-names: Fei
+    affiliation: >-
+      School of Civil and Environmental Engineering, Nanyang Technological
+      University, Singapore
+  - given-names: Mingyang
+    family-names: Zhang
+    affiliation: >-
+      Department of Naval Architecture and Ocean Engineering, Shanghai Jiao Tong
+      University, Shanghai, China
+  - given-names: Ran
+    family-names: Yan
+    affiliation: >-
+      School of Civil and Environmental Engineering, Nanyang Technological
+      University, Singapore
+license: MIT
+repository-code: 'TODO: add the public repository URL before submission'

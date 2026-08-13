@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2026 ruihanwang-maritime
+Copyright (c) 2026 Ruihan Wang, Chenyu Dong, Jasper Verschuur, Gianmarco
+Mengaldo, Xiuju Fu, Tangwei Mi, Xunchang Fei, Mingyang Zhang, Ran Yan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +20,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+The MIT terms above cover the code in code/ and tools/ only.
+
+The derived data files in data_public/ are released under the Creative Commons
+Attribution 4.0 International licence (CC BY 4.0).
+
+They contain no vessel counts, vessel identities or accident records. The
+licensed source datasets from which some of them are derived -- 2021 AIS
+positions (MarineTraffic) and 2002-2022 accident records (Lloyd's List
+Intelligence) -- are NOT included and are not redistributable under this or
+any other licence in this repository.
