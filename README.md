@@ -13,13 +13,10 @@ Two source datasets are licensed and cannot be redistributed:
 | Vessel-level AIS positions, 2021 | MarineTraffic | fixed shipping footprint, traffic weights |
 | Open-ocean accident records, 2002–2022 | Lloyd's List Intelligence | accident-consequence models |
 
-Everything else (ERA5, CMIP6, the continuous wave projection) is public; see the
-Data availability statement.
+Everything else (ERA5, CMIP6, the continuous wave projection) is public; see the Data availability statement.
 
-The `prepare_*.py` scripts are the only stage that touches those sources. They
-write normalised, non-identifying products into `data_public/`, and **every
-later script reads from `data_public/` only** — so the figures and Table 1 can
-be reproduced from this folder alone, without the licensed data.
+The `prepare_*.py` scripts are the only stage that accesses the licensed source data. They write normalised, non-identifying products into `data_public/`.
+The figure and service-life scripts use these derived products, whereas re-estimation of the accident-consequence models requires the licensed row-level accident records. The fitted model summaries reported in Table 1 are provided in `data_public/table1_accident_models.csv`.
 
 What leaves the prepare stage:
 
@@ -29,14 +26,13 @@ What leaves the prepare stage:
 * exposure days, which are traffic-weighted means and carry no counts
 * fitted model summaries for Table 1
 
-The single absolute quantity anywhere in `data_public/` is the `unique_mmsi`
-column of `basin_traffic_2021.csv`: the number of distinct cargo vessels
-entering each of the 14 AR6 basins during 2021. It is a basin-level aggregate
-from which no individual vessel or voyage can be recovered, it is what the
-Fig 4 bubble scale encodes, and the same figures are already printed in that
-figure's legend. It is therefore included deliberately. The file also carries
-`vessel_days_share`, a purely relative alternative summing to 1, should a
-counts-free version of Fig 4 ever be wanted.
+The single absolute quantity in `data_public/` is the `unique_mmsi`
+column of `basin_traffic_2021.csv`, which records the number of distinct cargo
+vessels entering each of the 14 AR6 basins during 2021. It is a basin-level
+aggregate from which no individual vessel or voyage can be recovered. This
+quantity determines the bubble scale in Main Fig. 5 and is also reported in
+the figure legend. The file additionally contains `vessel_days_share`, a
+relative traffic measure that sums to one.
 
 Accident counts in `table1_accident_models.csv` (per-category `n`, `n_obs`,
 `n_reference`) are sample sizes reported in Table 1 itself. The `n_cells` /
@@ -50,16 +46,14 @@ folder can never distribute it.
 
 ## Layout
 
-```
-code/                  analysis scripts, flat
-notebooks/             generated interactive copies, one per script
-tools/                 make_notebooks.py
-data_public/           derived data shipped with the code
+```text
+code/                  analysis scripts
+tools/                 optional utilities
+data_public/           derived data supplied with the code
 README.md
 requirements.txt       verified package versions
 LICENSE                MIT for code, CC BY 4.0 for data_public
 CITATION.cff
-```
 
 `code/` holds, in the order they run:
 
@@ -79,9 +73,9 @@ CITATION.cff
 | `fig4_regional_exposure_ratio.py` | Main Fig. 5 | Eq. 13 |
 | `ed_fig3_annual_projection.py` | Supplementary Fig. 9 | Eq. 4 |
 
-The `.py` files are the source of truth. `notebooks/` mirrors them cell by cell
-for interactive checking; regenerate after editing a script with
-`python tools/make_notebooks.py`.
+The `.py` files in `code/` are the source of truth. The optional
+`tools/make_notebooks.py` utility can be used to generate interactive notebook
+copies locally.
 
 ## Reproducing
 
@@ -89,12 +83,21 @@ for interactive checking; regenerate after editing a script with
 pip install -r requirements.txt
 ```
 
-The five `prepare_*` scripts and `accident_models.py` read the licensed source
-data. Run without it, they stop with an explanation rather than a traceback, and
-point at the outputs already provided. Everything needed for the figures is in
-`data_public/`, so **the paper's display items reproduce from this folder
-alone**. If the licensed data lives somewhere other than `G:\WRH_data`, set the
-`WRH_RAW` environment variable.
+The five `prepare_*` scripts access licensed source data and have already been
+run to generate the non-identifying products supplied in `data_public/`.
+Without access to the licensed source data, these preparation scripts stop with
+an explanatory message.
+
+The downstream exposure and figure scripts can be run using the derived
+products in `data_public/`. They support Main Figs. 1 and 3--5,
+Supplementary Fig. 9 and the service-life exposure estimates. Main Fig. 2 and
+additional Supplementary analyses require upstream processing of large ERA5,
+CMIP6 and wave-projection fields and are not reproduced directly by this
+compact repository.
+
+Re-estimation of the accident-consequence models requires the licensed
+row-level accident panel. The corresponding fitted estimates are supplied in
+`data_public/table1_accident_models.csv`.
 
 ```bash
 # needs the licensed sources; already run, outputs are in data_public/
@@ -121,11 +124,14 @@ Figure scripts open the figure with `plt.show()`; nothing is written to disk.
 pyarrow's, after which the parquet engine fails to load. `fig1` and `fig3` pin
 the order explicitly.
 
-## Upstream steps not included
+## Upstream processing not included
 
-This code starts from pre-computed intermediate products rather than from the
-raw ERA5 and CMIP6 fields. Three upstream stages therefore live outside it, in
-the working notebooks under `Desktop\WRH\paper code\`:
+This compact repository starts from pre-computed intermediate products.
+Generation of the basin- and month-specific thresholds, processing of the full
+ERA5 and CMIP6 fields, and construction of historical grid-cell fields require
+large source datasets and upstream workflows that are not included here. The
+derived products required for the downstream analyses are supplied in
+`data_public/`.
 
 | Stage | Produces | Where |
 |---|---|---|
@@ -135,27 +141,35 @@ the working notebooks under `Desktop\WRH\paper code\`:
 
 ## data_public/ contents
 
+```markdown
 | File | Contents | Used by |
 |---|---|---|
-| `footprint_global.parquet` | C_ij as a share of 2021 global traffic, plus cumulative share | Fig 1b |
-| `density_global_month.parquet` | W_ij,m, sums to 1 within each calendar month | Eq 2 |
-| `density_basin_month.parquet` | the same weights renormalised within each of 14 AR6 basins | Eq 13 |
-| `density_corridor_month.parquet` | the same weights renormalised within each of 4 corridors | Fig 3a |
-| `basin_traffic_2021.csv` | unique vessels and traffic share per basin | Fig 4 |
-| `exposure_annual.csv` | basin and corridor exposure days, **basin/month P99**, two 25-yr windows | Fig 4 |
-| `exposure_month.parquet` | the monthly version of the same | — |
-| `exposure_fixed_annual.csv` | global and corridor exposure days, **fixed thresholds**, 2015–2100 | Figs 2, 3, ED 3 |
-| `service_life_global.csv`, `service_life_global_per_model.csv` | 25-year cohort sums by delivery year | Fig 2b |
-| `table1_accident_models.csv` | odds ratios, AMEs, HCI effects, CIs | Table 1 |
-| `historical_gridcell_trend.npz` | per-cell OLS slope and p-value, 1980–2024 | Fig 1a |
-| `historical_exposure_share.npz` | per-cell % of global traffic-weighted exposure | Fig 1c |
-| `historical_annual.csv`, `historical_month.csv` | annual ECDs, exposure days, monthly climatology | Fig 1d, 1e |
+| `footprint_global.parquet` | 2021 global traffic shares and cumulative shares | Main Fig. 1b |
+| `density_global_month.parquet` | Monthly global traffic weights | Eq. 2 |
+| `density_basin_month.parquet` | Monthly traffic weights normalised within 14 AR6 basins | Eq. 13 and Main Fig. 5 |
+| `density_corridor_month.parquet` | Monthly traffic weights normalised within four corridors | Main Fig. 4a |
+| `basin_traffic_2021.csv` | Unique vessels and traffic shares by basin | Main Fig. 5 |
+| `exposure_annual.csv` | Basin- and corridor-level P99 exposure for two 25-year periods | Main Fig. 5 |
+| `exposure_month.parquet` | Monthly version of the basin- and corridor-level exposure data | — |
+| `exposure_fixed_annual.csv` | Global and corridor exposure under fixed thresholds, 2015–2100 | Main Figs. 3 and 4; Supplementary Fig. 9 |
+| `service_life_global.csv` | 25-year service-life exposure by delivery year | Main Fig. 3b |
+| `service_life_global_per_model.csv` | Model-specific wind service-life exposure | Main Fig. 3b |
+| `table1_accident_models.csv` | Odds ratios, probability effects, HCI effects and confidence intervals | Table 1 |
+| `historical_gridcell_trend.npz` | Grid-cell historical trends, 1980–2024 | Main Fig. 1a |
+| `historical_exposure_share.npz` | Grid-cell shares of global traffic-weighted exposure | Main Fig. 1c |
+| `historical_annual.csv` | Annual ECD and exposure series | Main Fig. 1d |
+| `historical_month.csv` | Monthly exposure climatology | Main Fig. 1e |
 
-### Two threshold definitions, deliberately kept apart
+### Two threshold definitions
 
-* **Fixed physical thresholds** (U10 ≥ 17.2 m s⁻¹, SWH ≥ 6 m) drive Figs 1–3 →
-  `exposure_fixed_annual.csv`
-* **Basin- and month-specific P95/P99** drive Fig 4 and Table 1 →
-  `exposure_annual.csv`
+* **Fixed physical thresholds** (`U10 ≥ 17.2 m s⁻¹` and `SWH ≥ 6 m`) are used
+  for the historical and global/corridor projection analyses in Main
+  Figs. 1, 3 and 4.
+* **Basin- and month-specific P95/P99 thresholds** are used for the
+  accident-consequence analysis and regional exposure ratios in Table 1 and
+  Main Fig. 5.
+
+The corresponding data are stored separately to prevent the two threshold
+definitions from being mixed.
 
 They live in separate files so the two are never mixed by accident.
