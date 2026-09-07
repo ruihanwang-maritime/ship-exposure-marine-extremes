@@ -160,7 +160,7 @@ derived products required for the downstream analyses are supplied in
 | `historical_annual.csv` | Annual ECD and exposure series | Main Fig. 1d |
 | `historical_month.csv` | Monthly exposure climatology | Main Fig. 1e |
 
-### Two threshold definitions
+## Two threshold definitions
 
 * **Fixed physical thresholds** (`U10 ≥ 17.2 m s⁻¹` and `SWH ≥ 6 m`) are used
   for the historical and global/corridor projection analyses in Main
