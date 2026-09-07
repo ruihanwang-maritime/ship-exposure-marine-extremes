@@ -39,10 +39,9 @@ Accident counts in `table1_accident_models.csv` (per-category `n`, `n_obs`,
 `cell_used` / `cell_total` columns of `exposure_month.parquet` count climate
 grid cells, not vessels.
 
-One intermediate table — the row-level accident panel — still contains licensed
-records. It is written **outside this folder**, to
-`G:\WRH_data\restricted_intermediate\`, so that archiving or zipping this
-folder can never distribute it.
+One intermediate table—the row-level accident panel—contains licensed records.
+It is written to a restricted directory outside this repository and is not
+included in the public archive.
 
 ## Layout
 
@@ -54,6 +53,7 @@ README.md
 requirements.txt       verified package versions
 LICENSE                MIT for code, CC BY 4.0 for data_public
 CITATION.cff
+```
 
 `code/` holds, in the order they run:
 
@@ -100,15 +100,15 @@ row-level accident panel. The corresponding fitted estimates are supplied in
 `data_public/table1_accident_models.csv`.
 
 ```bash
-# needs the licensed sources; already run, outputs are in data_public/
+# requires the licensed source data; derived outputs are already supplied
 python code/prepare_traffic_density.py
 python code/prepare_exposure_projected.py
 python code/prepare_exposure_fixed.py
 python code/prepare_historical.py
 python code/prepare_accident_panel.py
-
-# everything below runs from data_public/ alone
 python code/accident_models.py
+
+# runs from the derived products supplied in data_public/
 python code/service_life_exposure.py
 python code/fig1_historical.py
 python code/fig2_global_projection.py
@@ -132,12 +132,6 @@ ERA5 and CMIP6 fields, and construction of historical grid-cell fields require
 large source datasets and upstream workflows that are not included here. The
 derived products required for the downstream analyses are supplied in
 `data_public/`.
-
-| Stage | Produces | Where |
-|---|---|---|
-| Basin/month P95, P99 thresholds | `local_threshold/AR6_basin_month_*_1deg_2002_2022.csv` | `basin_historical_threshold.ipynb`, `corridor_historical_threshold.ipynb` |
-| Projected exceedance days → basin/corridor exposure | `new_climate/exposure/exposure_annual.csv` | `basin_corridor_extreme_days.ipynb` |
-| Historical grid-cell trends and exposure fields | `figure1_source/data/*.npz`, `*.parquet` | `figure1_source/regenerate_derived_data.py` |
 
 ## data_public/ contents
 
@@ -169,7 +163,5 @@ derived products required for the downstream analyses are supplied in
   accident-consequence analysis and regional exposure ratios in Table 1 and
   Main Fig. 5.
 
-The corresponding data are stored separately to prevent the two threshold
-definitions from being mixed.
+The corresponding data are stored separately to prevent the two threshold definitions from being mixed.
 
-They live in separate files so the two are never mixed by accident.
