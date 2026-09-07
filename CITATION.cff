@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: >-
-  Analysis code for "Global exposure of ocean-going ships to marine climate
-  extremes in a warming world"
+  Analysis code for "Climate change reshapes global shipping exposure to
+  marine extremes"
 message: If you use this software, please cite both the software and the paper.
 type: software
 authors:
@@ -50,4 +50,4 @@ authors:
       School of Civil and Environmental Engineering, Nanyang Technological
       University, Singapore
 license: MIT
-repository-code: 'TODO: add the public repository URL before submission'
+repository-code: 'https://github.com/ruihanwang-maritime/ship-exposure-marine-extremes'
