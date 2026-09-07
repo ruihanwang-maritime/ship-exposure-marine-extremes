@@ -141,7 +141,7 @@ derived products required for the downstream analyses are supplied in
 
 ## data_public/ contents
 
-```markdown
+
 | File | Contents | Used by |
 |---|---|---|
 | `footprint_global.parquet` | 2021 global traffic shares and cumulative shares | Main Fig. 1b |
