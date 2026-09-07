@@ -1,4 +1,4 @@
-# Global exposure of ocean-going ships to marine climate extremes in a warming world
+# Climate change reshapes global shipping exposure to marine extremes
 
 Analysis code for the manuscript. Each script names the Methods equations it
 implements, so results in the paper can be traced back to the code that
@@ -159,56 +159,3 @@ the working notebooks under `Desktop\WRH\paper code\`:
   `exposure_annual.csv`
 
 They live in separate files so the two are never mixed by accident.
-
-## Notes carried over from checking the manuscript
-
-1. **Threshold provenance.** Two basin/month threshold sets exist: pooled
-   grid-cell-days (`weather_wind_combine/month_threshold/`) and per-grid-cell
-   time quantiles averaged within the basin with land masking
-   (`local_threshold/`). They agree in open-ocean basins (median |Δ| 0.05 m s⁻¹
-   for wind, 0.016 m for waves) but not in marginal seas (MED +3.07 and SEA
-   +1.65 m s⁻¹ for wind, ARO +1.13 m for waves). Refitting Table 1 under each
-   shows the manuscript's estimates come from the **1° land-masked set**, the
-   same one Fig 4 uses, as the Methods state. This code uses the 1° set
-   throughout.
-
-2. **Global wave series, SSP1-2.6 in 2055.** Two archived copies of the series
-   exist under `new_climate/wave/masnum/exposure_results/`. They are identical
-   across all 75 years and all three SSPs except SSP1-2.6 in 2055, where the
-   earlier per-SSP files (`wave_exposure_ssp{X}.csv`) read 2.1637 days and the
-   later combined file (`wave_system_exposure_masnum_6m.csv`) reads 1.1637 — a
-   difference of exactly 1.0000. Since an annual figure is a traffic-weighted
-   mean over months whose weights each sum to one, a discrepancy of exactly 1.0
-   is one whole month counted as extreme everywhere, i.e. a defect in the
-   earlier files. The later file reproduces all fifteen Fig 2b cohort values.
-   **The earlier `wave_exposure_ssp{X}.csv` files should not be used.**
-
-3. **Outstanding differences against the manuscript (v33).** Everything else
-   reproduces exactly; these four do not:
-
-   * Fig 2a, SSP5-8.5: the percentage is shown as `1.40%`, but 0.285 → 0.281 is
-     a decrease, so it should read **−1.40%**.
-   * Results, service-life wave: the 2070 cohort under SSP2-4.5 is given as
-     20.3 days; Eq 9 gives **20.4** (20.442). The other three figures in the
-     same sentence reproduce exactly, and no window convention yields 20.3.
-   * Corridor annual means: the text gives 2.05 (RT–NY wind lower bound),
-     1.56 (YRD–LA/LB wind lower bound) and 6.94 (YRD–LA/LB wave upper bound);
-     the archived series give **2.04, 1.54 and 6.93**. Not an aggregation
-     artefact — model-year coverage is balanced and all three averaging
-     conventions agree.
-   * Fig 1e, wave January: the panel reads 0.15; over the labelled 1980–2024
-     period the value is 0.1555, i.e. **0.16**. A 1979 start gives 0.15.
-
-4. **Source-file naming.** The accident table was written through a non-raw
-   Windows path string, so the leading `2002_` of the filename was read as an
-   octal escape. The file sits directly in `G:\WRH_data\` with an invisible
-   control byte in its name rather than inside `maritime accident\`. Worth
-   renaming before archiving.
-
-5. **Not included.** Extended Data Figs 1 and 2 need raw-data stages that do not
-   exist here: ED Fig 1 requires the vessel-level AIS × ERA5 join, which also
-   backs the observational threshold check quoted in Results (55,710 vessels,
-   8.66 %, 46.5 % and 40.6 %); ED Fig 2a needs the 0.1° AIS position density,
-   whose underlying data cannot be released in any case; ED Fig 2b needs the
-   gridded CMIP6 exceedance-day difference. Supplementary Information is out of
-   scope for the initial submission.
