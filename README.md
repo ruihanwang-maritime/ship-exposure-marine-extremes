@@ -63,21 +63,21 @@ CITATION.cff
 
 `code/` holds, in the order they run:
 
-| Script | Does | Methods |
+| Script | Output | Methods |
 |---|---|---|
-| `config.py` | all paths and analysis constants | — |
-| `prepare_traffic_density.py` | AIS footprint → monthly traffic weights | Eq 1, 2, 13 |
-| `prepare_exposure_projected.py` | strips traffic volumes from the P99 exposure tables | Eq 3–4 |
-| `prepare_exposure_fixed.py` | collects the fixed-threshold exposure series | Eq 4 |
-| `prepare_historical.py` | 1980–2024 trends, ECDs and exposure | Eq 4–5, 8 |
-| `prepare_accident_panel.py` | accident × threshold matching, four categories | Eq 11 |
-| `accident_models.py` | logit and OLS → **Table 1** | Eq 10–12 |
-| `service_life_exposure.py` | 25-year delivery-cohort sums | Eq 9 |
-| `fig1_historical.py` | **Fig 1** | — |
-| `fig2_global_projection.py` | **Fig 2** | Eq 9 |
-| `fig3_corridor_exposure.py` | **Fig 3** | Eq 9 |
-| `fig4_regional_exposure_ratio.py` | **Fig 4** | Eq 13 |
-| `ed_fig3_annual_projection.py` | **Extended Data Fig 3** | Eq 4 |
+| `config.py` | analysis paths and constants | — |
+| `prepare_traffic_density.py` | monthly traffic weights | Eqs. 1, 2 and 13 |
+| `prepare_exposure_projected.py` | projected exposure products | Eqs. 3 and 4 |
+| `prepare_exposure_fixed.py` | fixed-threshold exposure series | Eq. 4 |
+| `prepare_historical.py` | historical ECD and exposure trends | Eqs. 4, 5 and 8 |
+| `prepare_accident_panel.py` | accident-weather matching | Eq. 11 |
+| `accident_models.py` | Table 1 | Eqs. 10–12 |
+| `service_life_exposure.py` | 25-year service-life exposure | Eq. 9 |
+| `fig1_historical.py` | Main Fig. 1 | — |
+| `fig2_global_projection.py` | Main Fig. 3 | Eq. 9 |
+| `fig3_corridor_exposure.py` | Main Fig. 4 | Eq. 9 |
+| `fig4_regional_exposure_ratio.py` | Main Fig. 5 | Eq. 13 |
+| `ed_fig3_annual_projection.py` | Supplementary Fig. 9 | Eq. 4 |
 
 The `.py` files are the source of truth. `notebooks/` mirrors them cell by cell
 for interactive checking; regenerate after editing a script with
